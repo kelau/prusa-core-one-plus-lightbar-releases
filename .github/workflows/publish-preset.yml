@@ -1,0 +1,40 @@
+name: Publish colour preset
+
+on:
+  issues:
+    types: [opened]
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  publish:
+    if: startsWith(github.event.issue.title, 'Colour preset:')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate and publish preset
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const body = context.payload.issue.body || '';
+            const match = body.match(/```json\s*([\s\S]*?)```/i);
+            if (!match) { core.setFailed('No JSON preset block found'); return; }
+            let preset;
+            try { preset = JSON.parse(match[1]); } catch (error) { core.setFailed(`Invalid JSON: ${error.message}`); return; }
+            const keys = ['idle','ready','printing','complete','paused','error','busy','unknown','bedHeating','nozzleHeating','bothHeating','bedCooling','nozzleCooling','bothCooling','zMotion','setupAp','startup'];
+            const name = String(preset.name || '').trim();
+            const normalized = name.toLowerCase().replace(/[^a-z0-9]+/g, ' ');
+            const blocked = ['fuck','shit','bitch','cunt','nazi','nigger','faggot','retard'];
+            if (!/^[A-Za-z0-9][A-Za-z0-9 &'()+,.\-]{1,31}$/.test(name)) core.setFailed('Name must be 2-32 characters using the permitted character set');
+            if (blocked.some(term => normalized.includes(term))) core.setFailed('Preset name contains a blocked term');
+            if (!preset.colors || keys.some(key => !Number.isInteger(preset.colors[key]) || preset.colors[key] < 0 || preset.colors[key] > 0xffffff)) core.setFailed('Missing or invalid colour value');
+            if (process.exitCode) return;
+            const path = 'presets/catalog.json';
+            const current = await github.rest.repos.getContent({...context.repo, path});
+            const catalog = JSON.parse(Buffer.from(current.data.content, 'base64').toString('utf8'));
+            if (catalog.presets.some(item => item.name.toLowerCase() === name.toLowerCase())) { core.setFailed('A preset with this name already exists'); return; }
+            catalog.presets.push({name, colors: Object.fromEntries(keys.map(key => [key, preset.colors[key]])), author: context.payload.issue.user.login, issue: context.payload.issue.number});
+            await github.rest.repos.createOrUpdateFileContents({...context.repo, path, sha: current.data.sha, message: `Publish colour preset: ${name}`, content: Buffer.from(JSON.stringify(catalog, null, 2) + '\n').toString('base64')});
+            await github.rest.issues.createComment({...context.repo, issue_number: context.payload.issue.number, body: `Validation passed and **${name}** was published to the community preset catalogue.`});
+            await github.rest.issues.update({...context.repo, issue_number: context.payload.issue.number, state: 'closed'});
