@@ -7,6 +7,13 @@
       "file": "files/seeq-default.json",
       "sha256": "0f18b1887354944dee61b3c5ef9ad9c486ba63fab93dc4c13d12daa4346af995",
       "builtIn": true
+    },
+    {
+      "name": "Test",
+      "file": "files/test.json",
+      "sha256": "b9e655ecc231067b0d433021887ad65093da0fdde483784ab51e5a75ef45b194",
+      "author": "kennethlauridsen-sudo",
+      "issue": 1
     }
   ]
 }
