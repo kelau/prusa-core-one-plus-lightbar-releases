@@ -1,6 +1,8 @@
 {
-  "schema": 1,
+  "schema": 2,
   "name": "Test",
+  "description": "Community preset migrated from the previous submission system.",
+  "hardwareId": "legacy",
   "colors": {
     "idle": 13711360,
     "ready": 16768170,
@@ -19,7 +21,5 @@
     "zMotion": 56575,
     "setupAp": 16737280,
     "startup": 13711360
-  },
-  "author": "kennethlauridsen-sudo",
-  "issue": 1
+  }
 }

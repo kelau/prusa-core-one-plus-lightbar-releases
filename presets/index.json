@@ -1,19 +1,21 @@
 {
-  "schema": 2,
+  "schema": 3,
   "maxPresets": 200,
   "presets": [
     {
       "name": "Seeq Default",
+      "description": "The original Seeq CORE ONE+ Lightbar colour palette.",
+      "hardwareId": "builtin",
       "file": "files/seeq-default.json",
-      "sha256": "0f18b1887354944dee61b3c5ef9ad9c486ba63fab93dc4c13d12daa4346af995",
+      "sha256": "c7f358e10065ac569a17bed19bfa3d6d739cc3dbe1db85b0f061e1a4e1fed62d",
       "builtIn": true
     },
     {
       "name": "Test",
+      "description": "Community preset migrated from the previous submission system.",
+      "hardwareId": "legacy",
       "file": "files/test.json",
-      "sha256": "b9e655ecc231067b0d433021887ad65093da0fdde483784ab51e5a75ef45b194",
-      "author": "kennethlauridsen-sudo",
-      "issue": 1
+      "sha256": "8159e0f7780cfbc140cf443e08447482f3c3e1542d6d716300ca185e961dace7"
     }
   ]
 }

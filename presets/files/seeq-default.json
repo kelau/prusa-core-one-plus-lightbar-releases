@@ -1,6 +1,8 @@
 {
-  "schema": 1,
+  "schema": 2,
   "name": "Seeq Default",
+  "description": "The original Seeq CORE ONE+ Lightbar colour palette.",
+  "hardwareId": "builtin",
   "colors": {
     "idle": 16768170,
     "ready": 16768170,
