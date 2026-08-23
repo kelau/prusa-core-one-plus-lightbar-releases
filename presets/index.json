@@ -16,6 +16,13 @@
       "hardwareId": "legacy",
       "file": "files/test.json",
       "sha256": "8159e0f7780cfbc140cf443e08447482f3c3e1542d6d716300ca185e961dace7"
+    },
+    {
+      "name": "Test 2",
+      "description": "This is a cloudflare test",
+      "hardwareId": "b97ba29294beb80620b50171",
+      "file": "files/test-2-b97ba292.json",
+      "sha256": "f869d15b505d9d16f8cbcab3c1b7bc7b8a0d65f71a25e40751b65b5034a95ebd"
     }
   ]
 }
