@@ -1,0 +1,12 @@
+{
+  "schema": 2,
+  "maxPresets": 200,
+  "presets": [
+    {
+      "name": "Seeq Default",
+      "file": "files/seeq-default.json",
+      "sha256": "0f18b1887354944dee61b3c5ef9ad9c486ba63fab93dc4c13d12daa4346af995",
+      "builtIn": true
+    }
+  ]
+}

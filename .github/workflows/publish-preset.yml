@@ -8,13 +8,17 @@ permissions:
   contents: write
   issues: write
 
+concurrency:
+  group: colour-preset-publication
+  cancel-in-progress: false
+
 jobs:
   publish:
     if: startsWith(github.event.issue.title, 'Colour preset:')
     runs-on: ubuntu-latest
     steps:
       - name: Validate and publish preset
-        uses: actions/github-script@v7
+        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b
         with:
           script: |
             const body = context.payload.issue.body || '';
@@ -26,15 +30,37 @@ jobs:
             const name = String(preset.name || '').trim();
             const normalized = name.toLowerCase().replace(/[^a-z0-9]+/g, ' ');
             const blocked = ['fuck','shit','bitch','cunt','nazi','nigger','faggot','retard'];
+            if (preset.schema !== 1) core.setFailed('Unsupported preset schema');
             if (!/^[A-Za-z0-9][A-Za-z0-9 &'()+,.\-]{1,31}$/.test(name)) core.setFailed('Name must be 2-32 characters using the permitted character set');
             if (blocked.some(term => normalized.includes(term))) core.setFailed('Preset name contains a blocked term');
-            if (!preset.colors || keys.some(key => !Number.isInteger(preset.colors[key]) || preset.colors[key] < 0 || preset.colors[key] > 0xffffff)) core.setFailed('Missing or invalid colour value');
+            if (!preset.colors || Object.keys(preset.colors).length !== keys.length || keys.some(key => !Number.isInteger(preset.colors[key]) || preset.colors[key] < 0 || preset.colors[key] > 0xffffff)) core.setFailed('Missing, additional, or invalid colour value');
             if (process.exitCode) return;
-            const path = 'presets/catalog.json';
-            const current = await github.rest.repos.getContent({...context.repo, path});
-            const catalog = JSON.parse(Buffer.from(current.data.content, 'base64').toString('utf8'));
-            if (catalog.presets.some(item => item.name.toLowerCase() === name.toLowerCase())) { core.setFailed('A preset with this name already exists'); return; }
-            catalog.presets.push({name, colors: Object.fromEntries(keys.map(key => [key, preset.colors[key]])), author: context.payload.issue.user.login, issue: context.payload.issue.number});
-            await github.rest.repos.createOrUpdateFileContents({...context.repo, path, sha: current.data.sha, message: `Publish colour preset: ${name}`, content: Buffer.from(JSON.stringify(catalog, null, 2) + '\n').toString('base64')});
+
+            const repoInfo = await github.rest.repos.get(context.repo);
+            const branch = repoInfo.data.default_branch;
+            const ref = await github.rest.git.getRef({...context.repo, ref: `heads/${branch}`});
+            const baseCommit = await github.rest.git.getCommit({...context.repo, commit_sha: ref.data.object.sha});
+            const indexResponse = await github.rest.repos.getContent({...context.repo, path: 'presets/index.json', ref: branch});
+            const index = JSON.parse(Buffer.from(indexResponse.data.content, 'base64').toString('utf8'));
+            if (index.schema !== 2 || !Array.isArray(index.presets) || index.presets.length >= 200) { core.setFailed('Preset catalogue is invalid or full'); return; }
+            if (index.presets.some(item => String(item.name).toLowerCase() === name.toLowerCase())) { core.setFailed('A preset with this name already exists'); return; }
+
+            let slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 48) || `preset-${context.payload.issue.number}`;
+            let file = `files/${slug}.json`;
+            if (index.presets.some(item => item.file === file)) file = `files/${slug}-${context.payload.issue.number}.json`;
+            const document = JSON.stringify({schema: 1, name, colors: Object.fromEntries(keys.map(key => [key, preset.colors[key]])), author: context.payload.issue.user.login, issue: context.payload.issue.number}, null, 2) + '\n';
+            const crypto = require('crypto');
+            const sha256 = crypto.createHash('sha256').update(document).digest('hex');
+            index.presets.push({name, file, sha256, author: context.payload.issue.user.login, issue: context.payload.issue.number});
+            const indexDocument = JSON.stringify(index, null, 2) + '\n';
+
+            const presetBlob = await github.rest.git.createBlob({...context.repo, content: Buffer.from(document).toString('base64'), encoding: 'base64'});
+            const indexBlob = await github.rest.git.createBlob({...context.repo, content: Buffer.from(indexDocument).toString('base64'), encoding: 'base64'});
+            const tree = await github.rest.git.createTree({...context.repo, base_tree: baseCommit.data.tree.sha, tree: [
+              {path: `presets/${file}`, mode: '100644', type: 'blob', sha: presetBlob.data.sha},
+              {path: 'presets/index.json', mode: '100644', type: 'blob', sha: indexBlob.data.sha}
+            ]});
+            const commit = await github.rest.git.createCommit({...context.repo, message: `Publish colour preset: ${name}`, tree: tree.data.sha, parents: [ref.data.object.sha]});
+            await github.rest.git.updateRef({...context.repo, ref: `heads/${branch}`, sha: commit.data.sha, force: false});
             await github.rest.issues.createComment({...context.repo, issue_number: context.payload.issue.number, body: `Validation passed and **${name}** was published to the community preset catalogue.`});
             await github.rest.issues.update({...context.repo, issue_number: context.payload.issue.number, state: 'closed'});
