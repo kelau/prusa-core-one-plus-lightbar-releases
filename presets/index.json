@@ -3,6 +3,13 @@
   "maxPresets": 200,
   "presets": [
     {
+      "name": "Prusa Orange",
+      "description": "Changes the IDLE state to Prusa Orange.",
+      "hardwareId": "b97ba29294beb80620b50171",
+      "file": "files/prusa-orange-b97ba292.json",
+      "sha256": "231e50cb8fe39d36221be1b3d6fb8df8b4c229524698b42679e16e05bb4c9cf4"
+    },
+    {
       "name": "Seeq Default",
       "description": "The original Seeq CORE ONE+ Lightbar colour palette.",
       "hardwareId": "builtin",
