@@ -3,6 +3,7 @@
   "name": "Test 2",
   "description": "This is a cloudflare test",
   "hardwareId": "b97ba29294beb80620b50171",
+  "submittedAt": "2026-08-23T17:59:51.803Z",
   "colors": {
     "idle": 13711360,
     "ready": 16768170,
@@ -21,6 +22,5 @@
     "zMotion": 56575,
     "setupAp": 16737280,
     "startup": 13711360
-  },
-  "submittedAt": "2026-08-23T17:59:51.803Z"
+  }
 }

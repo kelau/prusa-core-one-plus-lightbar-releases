@@ -3,6 +3,7 @@
   "name": "Test",
   "description": "Community preset migrated from the previous submission system.",
   "hardwareId": "legacy",
+  "submittedAt": "2026-08-23T16:13:11Z",
   "colors": {
     "idle": 13711360,
     "ready": 16768170,

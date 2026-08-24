@@ -2,12 +2,23 @@ import hashlib
 import json
 import re
 import sys
+from datetime import datetime
 from pathlib import Path
 
 COLOR_KEYS = {"idle", "ready", "printing", "complete", "paused", "error", "busy", "unknown", "bedHeating", "nozzleHeating", "bothHeating", "bedCooling", "nozzleCooling", "bothCooling", "zMotion", "setupAp", "startup"}
 NAME = re.compile(r"^[A-Za-z0-9][A-Za-z0-9 &'()+,.\-]{1,31}$")
 HARDWARE_ID = re.compile(r"^[0-9a-f]{24}$")
 ID = re.compile(r"^[0-9a-f-]{36}$")
+
+
+def valid_timestamp(value: object) -> bool:
+    if not isinstance(value, str) or not value.endswith("Z"):
+        return False
+    try:
+        datetime.fromisoformat(value[:-1] + "+00:00")
+        return True
+    except ValueError:
+        return False
 
 
 def valid(preset: dict) -> bool:
@@ -33,7 +44,8 @@ def main() -> None:
     published = []
     for submission in pending.get("submissions", []):
         submission_id, preset = submission.get("id"), submission.get("preset")
-        if not isinstance(submission_id, str) or not ID.fullmatch(submission_id) or not valid(preset):
+        submitted_at = submission.get("createdAt")
+        if not isinstance(submission_id, str) or not ID.fullmatch(submission_id) or not valid(preset) or not valid_timestamp(submitted_at):
             raise ValueError("Invalid queued submission")
         if preset["name"].casefold() in names or len(index["presets"]) >= 200:
             published.append(submission_id)
@@ -42,10 +54,10 @@ def main() -> None:
         file = f"files/{slug}-{preset['hardwareId'][:8]}.json"
         if file in files:
             file = f"files/{slug}-{submission_id[:8]}.json"
-        document = {**preset, "submittedAt": submission["createdAt"]}
+        document = {**preset, "submittedAt": submitted_at}
         raw = (json.dumps(document, indent=2) + "\n").encode()
         (root / file).write_bytes(raw)
-        index["presets"].append({"name": preset["name"], "description": preset["description"], "hardwareId": preset["hardwareId"], "file": file, "sha256": hashlib.sha256(raw).hexdigest()})
+        index["presets"].append({"name": preset["name"], "description": preset["description"], "hardwareId": preset["hardwareId"], "submittedAt": submitted_at, "file": file, "sha256": hashlib.sha256(raw).hexdigest()})
         names.add(preset["name"].casefold()); files.add(file); published.append(submission_id)
     index["presets"].sort(key=lambda entry: entry["name"].casefold())
     index_path.write_text(json.dumps(index, indent=2) + "\n", encoding="utf-8")

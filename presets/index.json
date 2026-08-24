@@ -6,30 +6,34 @@
       "name": "Prusa Orange",
       "description": "Changes the IDLE state to Prusa Orange.",
       "hardwareId": "b97ba29294beb80620b50171",
+      "submittedAt": "2026-08-24T07:22:20.809Z",
       "file": "files/prusa-orange-b97ba292.json",
-      "sha256": "231e50cb8fe39d36221be1b3d6fb8df8b4c229524698b42679e16e05bb4c9cf4"
+      "sha256": "a46000ab01031931887c510aa906a44d7d2e24a5f563eeda71979ab8f30995e0"
     },
     {
       "name": "Seeq Default",
       "description": "The original Seeq CORE ONE+ Lightbar colour palette.",
       "hardwareId": "builtin",
+      "submittedAt": "2026-08-23T00:00:00Z",
       "file": "files/seeq-default.json",
-      "sha256": "c7f358e10065ac569a17bed19bfa3d6d739cc3dbe1db85b0f061e1a4e1fed62d",
+      "sha256": "231c1e824efc263d7400367e23a6d3e78f1b179b98f3c318576bea8c127af122",
       "builtIn": true
     },
     {
       "name": "Test",
       "description": "Community preset migrated from the previous submission system.",
       "hardwareId": "legacy",
+      "submittedAt": "2026-08-23T16:13:11Z",
       "file": "files/test.json",
-      "sha256": "8159e0f7780cfbc140cf443e08447482f3c3e1542d6d716300ca185e961dace7"
+      "sha256": "b2074590735f5a40dd1a72cb17d0c55ddce6d45841ec50203565eacc83c438bf"
     },
     {
       "name": "Test 2",
       "description": "This is a cloudflare test",
       "hardwareId": "b97ba29294beb80620b50171",
+      "submittedAt": "2026-08-23T17:59:51.803Z",
       "file": "files/test-2-b97ba292.json",
-      "sha256": "f869d15b505d9d16f8cbcab3c1b7bc7b8a0d65f71a25e40751b65b5034a95ebd"
+      "sha256": "093d363f08527fcdf6aa840ce0f0f27b02ee0d10536a8c85da4679c4d1b6f5fa"
     }
   ]
 }
