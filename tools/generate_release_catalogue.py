@@ -39,7 +39,18 @@ def build_catalogue(releases, generated_at):
         notes = str(release.get("body") or "").strip()
         if len(notes) > MAX_NOTES_CHARS:
             notes = notes[: MAX_NOTES_CHARS - 1].rstrip() + "…"
-        entries.append({"tag": str(release.get("tag_name") or ""), "name": str(release.get("name") or ""), "publishedAt": str(release.get("published_at") or ""), "prerelease": bool(release.get("prerelease")), "notes": notes, "assetId": asset_id, "assetName": str(asset.get("name") or ""), "assetSize": int(asset.get("size") or 0)})
+        entries.append(
+            {
+                "tag": str(release.get("tag_name") or ""),
+                "name": str(release.get("name") or ""),
+                "publishedAt": str(release.get("published_at") or ""),
+                "prerelease": bool(release.get("prerelease")),
+                "notes": notes,
+                "assetId": asset_id,
+                "assetName": str(asset.get("name") or ""),
+                "assetSize": int(asset.get("size") or 0),
+            }
+        )
         if len(entries) >= MAX_RELEASES:
             break
     return {"schema": SCHEMA, "generatedAt": generated_at, "releases": entries}
@@ -47,8 +58,8 @@ def build_catalogue(releases, generated_at):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("input", type=Path)
-    parser.add_argument("output", type=Path)
+    parser.add_argument("input", type=Path, help="GitHub releases API JSON")
+    parser.add_argument("output", type=Path, help="Catalogue output path")
     parser.add_argument("--generated-at")
     args = parser.parse_args()
     releases = json.loads(args.input.read_text(encoding="utf-8"))
