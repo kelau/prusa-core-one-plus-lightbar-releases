@@ -18,22 +18,6 @@
       "file": "files/seeq-default.json",
       "sha256": "231c1e824efc263d7400367e23a6d3e78f1b179b98f3c318576bea8c127af122",
       "builtIn": true
-    },
-    {
-      "name": "Test",
-      "description": "Community preset migrated from the previous submission system.",
-      "hardwareId": "legacy",
-      "submittedAt": "2026-08-23T16:13:11Z",
-      "file": "files/test.json",
-      "sha256": "b2074590735f5a40dd1a72cb17d0c55ddce6d45841ec50203565eacc83c438bf"
-    },
-    {
-      "name": "Test 2",
-      "description": "This is a cloudflare test",
-      "hardwareId": "b97ba29294beb80620b50171",
-      "submittedAt": "2026-08-23T17:59:51.803Z",
-      "file": "files/test-2-b97ba292.json",
-      "sha256": "093d363f08527fcdf6aa840ce0f0f27b02ee0d10536a8c85da4679c4d1b6f5fa"
     }
   ]
 }
