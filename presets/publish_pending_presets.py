@@ -39,7 +39,7 @@ def valid_index_entry(entry: object) -> bool:
         isinstance(entry, dict)
         and isinstance(entry.get("name"), str) and NAME.fullmatch(entry["name"])
         and isinstance(entry.get("description"), str) and len(entry["description"].encode()) <= 500
-        and (entry.get("hardwareId") == "builtin" or isinstance(entry.get("hardwareId"), str) and HARDWARE_ID.fullmatch(entry["hardwareId"]))
+        and (entry.get("hardwareId") in {"builtin", "legacy"} or isinstance(entry.get("hardwareId"), str) and HARDWARE_ID.fullmatch(entry["hardwareId"]))
         and valid_timestamp(entry.get("submittedAt"))
         and isinstance(entry.get("file"), str) and FILE.fullmatch(entry["file"])
         and isinstance(entry.get("sha256"), str) and SHA256.fullmatch(entry["sha256"])
