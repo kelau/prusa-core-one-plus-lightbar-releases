@@ -23,9 +23,14 @@ def valid_timestamp(value: object) -> bool:
         return False
 
 
+def valid_progress_bar(value: object) -> bool:
+    return isinstance(value, dict) and set(value) == {"mode", "color"} and type(value["mode"]) is int and 0 <= value["mode"] <= 2 and type(value["color"]) is int and 0 <= value["color"] <= 0xFFFFFF
+
+
 def valid(preset: dict) -> bool:
     return (
-        preset.get("schema") == 2
+        isinstance(preset, dict) and preset.get("schema") == 2
+        and ("progressBar" not in preset or valid_progress_bar(preset["progressBar"]))
         and isinstance(preset.get("name"), str) and NAME.fullmatch(preset["name"])
         and isinstance(preset.get("description"), str) and 0 < len(preset["description"].encode()) <= 500
         and isinstance(preset.get("hardwareId"), str) and HARDWARE_ID.fullmatch(preset["hardwareId"])
