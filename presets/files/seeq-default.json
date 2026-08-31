@@ -5,7 +5,7 @@
   "hardwareId": "builtin",
   "submittedAt": "2026-08-23T00:00:00Z",
   "colors": {
-    "idle": 16768170,
+    "idle": 13711360,
     "ready": 16768170,
     "printing": 30975,
     "complete": 65350,
@@ -21,6 +21,6 @@
     "bothCooling": 38655,
     "zMotion": 56575,
     "setupAp": 16737280,
-    "startup": 16410673
+    "startup": 13711360
   }
 }
