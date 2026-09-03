@@ -1,7 +1,7 @@
 {
   "schema": 2,
-  "name": "Seeq Default",
-  "description": "The original Seeq CORE ONE+ Lightbar colour palette.",
+  "name": "Zeeq Default",
+  "description": "The original Zeeq CORE ONE+ Lightbar colour palette.",
   "hardwareId": "builtin",
   "submittedAt": "2026-08-23T00:00:00Z",
   "colors": {

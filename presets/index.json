@@ -3,12 +3,12 @@
   "maxPresets": 200,
   "presets": [
     {
-      "name": "Seeq Default",
-      "description": "The original Seeq CORE ONE+ Lightbar colour palette.",
+      "name": "Zeeq Default",
+      "description": "The original Zeeq CORE ONE+ Lightbar colour palette.",
       "hardwareId": "builtin",
       "submittedAt": "2026-08-23T00:00:00Z",
       "file": "files/seeq-default.json",
-      "sha256": "1cd65afb72673badf9d4311c87d745a5f580ffbbadef9e1ecd619cb0dad7c81c",
+      "sha256": "6e2c082b031a18bbab2e3106ce0197bda4f9a4e467df4baf86a08e1090f34f22",
       "builtIn": true
     }
   ]
